@@ -1,11 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View } from "react-native";
+import CurrentTime from "./components/CurrentTime";
+import LocalTime from "./components/LocalTime";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text style={styles.text}>Clock</Text>
       <StatusBar style="auto" />
+      {/* <CurrentTime /> */}
+      <LocalTime />
     </View>
   );
 }
@@ -13,8 +17,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: "flex-start",
+    // alignItems: "flex-start",
+    marginTop: 50,
+    backgroundColor: "black",
+  },
+  text: {
+    color: "white",
+    margin: 8,
+    fontSize: 30,
+    fontWeight: "400",
   },
 });
