@@ -1,4 +1,4 @@
-import { Pressable, View, Text, StyleSheet, Button } from "react-native";
+import { Pressable, View, Text, StyleSheet } from "react-native";
 
 function PlusButton({ onPressed }) {
   return (

@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { useEffect, useState } from "react";
 
 function CurrentTime() {
@@ -17,12 +17,8 @@ function CurrentTime() {
       .then((json) => setData(json))
       .catch((error) => console.error(error));
   }, []);
-  console.log(data);
-  return (
-    <View>
-      <Text>{data["time"]}</Text>
-    </View>
-  );
+  // console.log(data);
+  return <View>{/* <Text>{data["time"]}</Text> */}</View>;
 }
 
 export default CurrentTime;
