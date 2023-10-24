@@ -1,12 +1,14 @@
 import { StyleSheet, View } from "react-native";
 //custome-made components:
-import LocalTime from "../components/LocalTime";
-import PlusButton from "../components/PlusButton";
+import LocalTime from "./LocalTime";
+import PlusButton from "./PlusButton";
+import TimeList from "./TimeList";
 
-function HomeScreen({ onPlusPressed }) {
+function HomeScreen({ onPlusPressed, timesArray }) {
   return (
     <View style={styles.container}>
       <LocalTime />
+      <TimeList timesArray={timesArray} />
       <View style={styles.buttonContainer}>
         <PlusButton onPressed={onPlusPressed} />
       </View>

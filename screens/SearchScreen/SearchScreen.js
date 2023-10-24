@@ -1,21 +1,17 @@
 import { StyleSheet, View, TextInput, Text } from "react-native";
 import { useState } from "react";
-import TimezoneList from "../components/TimezoneList";
+import TimezoneList from "./TimezoneList";
 
-function SearchScreen() {
-  [chosenTimezone, setChosenTimezone] = useState("");
+function SearchScreen({ passChosenTimezone }) {
+  const [chosenTimezone, setChosenTimezone] = useState("");
   //Not using this function to do anything meaningful just yet.
   function fetchTimezones(typedValue) {
     console.log(typedValue);
   }
-  function passTimezoneValue(timeZone) {
-    console.log("timezone: ");
-    console.log(timeZone);
-    setChosenTimezone(timeZone);
+  function passTimezoneValue(timezone) {
+    setChosenTimezone(timezone);
+    passChosenTimezone(timezone);
   }
-  const timeZones = ["1", "2", "3", "4"];
-  console.log(timeZones[0]);
-  console.log("chosenTimezone: " + chosenTimezone);
   return (
     <View style={styles.container}>
       <TextInput

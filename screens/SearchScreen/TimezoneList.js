@@ -11,7 +11,6 @@ function TimezoneList({ passTimezoneValue }) {
       .then((json) => setTimezoneList(json))
       .catch((error) => console.error(error));
   }, []);
-  console.log(timezoneList);
   return (
     <FlatList
       data={timezoneList}
@@ -20,8 +19,6 @@ function TimezoneList({ passTimezoneValue }) {
           <Pressable
             onPress={() => {
               selectedTimezone = itemData.item;
-              console.log(itemData.item);
-              console.log(selectedTimezone);
               passTimezoneValue(selectedTimezone);
             }}
           >

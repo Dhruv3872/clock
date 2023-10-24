@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet } from "react-native";
 
 //custom components:
-import ProfileImage from "../components/ProfileImage";
+import ProfileImage from "./ProfileImage";
 //lazy loading:
 //?
 
@@ -12,7 +12,7 @@ function ProfileScreen() {
         <ProfileImage />
       </View>
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>Dhruv Dave</Text>
+        <Text style={styles.name}>John Doe</Text>
       </View>
     </View>
   );

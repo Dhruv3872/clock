@@ -13,19 +13,12 @@ function PlusButton({ onPressed }) {
 export default PlusButton;
 
 const styles = StyleSheet.create({
-  buttonView: {
-    // margin: 4,
-    // borderColor: "white",
-    // overflow: "hidden",
-  },
+  buttonView: {},
   buttonInnerContainer: {
     borderRadius: 70,
     backgroundColor: "blue",
-    // padding: 8,
     margin: 4,
-    // flex: 1,
     width: 75,
-    // elevation: 5,
   },
   buttonText: {
     color: "white",

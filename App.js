@@ -13,22 +13,35 @@ import { FontAwesome } from "@expo/vector-icons";
 
 //custome-made components:
 //screens:
-import HomeScreen from "./screens/HomeScreen";
-import SearchScreen from "./screens/SearchScreen";
+import HomeScreen from "./screens/HomeScreen/HomeScreen";
+import SearchScreen from "./screens/SearchScreen/SearchScreen";
 import AlarmScreen from "./screens/AlarmScreen";
 import TimerScreen from "./screens/TimerScreen";
 import StopwatchScreen from "./screens/StopwatchScreen";
 import BedtimeScreen from "./screens/BedtimeScreen";
-import ProfileScreen from "./screens/ProfileScreen";
+import ProfileScreen from "./screens/ProfileScreen/ProfileScreen";
 
 export default function App() {
-  [plusPressed, setPlusPressed] = useState(false);
+  //State array variable to pass an array of timezones to the HomeScreen component,
+  // which in turn passes the array to TimeList component, which passes the array
+  // to the data prop of the Flatlist it uses to display the list of timezones
+  // selected by the user.
+  const [timesArray, setTimesArray] = useState([]);
+  const [plusPressed, setPlusPressed] = useState(false);
   //Navigator:
   const Tab = createBottomTabNavigator();
-  let screen;
   function plusButtonHandler() {
     setPlusPressed(true);
-    console.log(plusPressed);
+  }
+  function timezoneValueHandler(timezone) {
+    console.log("timezone: " + timezone);
+    setTimesArray((timesArray) => [...timesArray, timezone]);
+    console.log(timesArray); //When we log the value of a state variable in
+    // on console after setting its value using the set method, it apparently logs
+    // the last value of the variable, not the latest value, but the state of the variable
+    // is updated fine, and the updated value is passed when we pass the variable using curly
+    // braces.
+    setPlusPressed(false);
   }
   return (
     <View style={styles.navigationContainerView}>
@@ -42,7 +55,6 @@ export default function App() {
               let icon;
               if (route.name === "Clock") {
                 iconName = focused ? "clockcircle" : "clockcircleo";
-                // You can return any component that you like here!
                 icon = <AntDesign name={iconName} size={size} color={color} />;
               } else if (route.name === "Alarm") {
                 iconName = focused ? "alarm" : "alarm-outline";
@@ -81,7 +93,12 @@ export default function App() {
           <Tab.Screen name="Alarm" component={AlarmScreen} />
           <Tab.Screen
             name="Clock"
-            children={() => <HomeScreen onPlusPressed={plusButtonHandler} />}
+            children={() => (
+              <HomeScreen
+                onPlusPressed={plusButtonHandler}
+                timesArray={timesArray}
+              />
+            )}
           />
           <Tab.Screen name="Timer" component={TimerScreen} />
           <Tab.Screen name="Stopwatch" component={StopwatchScreen} />
@@ -95,7 +112,10 @@ export default function App() {
         visible={plusPressed}
         onRequestClose={() => setPlusPressed(false)}
       >
-        <SearchScreen style={styles.modalContainer} />
+        <SearchScreen
+          style={styles.modalContainer}
+          passChosenTimezone={timezoneValueHandler}
+        />
       </Modal>
     </View>
   );

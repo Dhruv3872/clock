@@ -5,5 +5,9 @@ alongwith its 'World clock' feature using [TimeAPI](https://www.timeapi.io/swagg
 
 ### Changes introduced in this commit:
 
-1. Added a 'TimezoneList' custom component to show the list of time zones fetched from the TimeAPI. Then I used the component by importing it into the 'SearchScreen' component.
-2. Added a Modal at the root of the app to show the search screen when the + button is clicked from the home screen.
+1. Put components in their respective screen component folders. This will not affect  
+   the components which will be used on different screens if any. We will keep them in  
+   the 'components' folder.
+1. Created 'TimeList' component using FlatList and Added it in the HomeScreen component to show a list of  
+   timezones chosen by the customer. Later, we will call TimeAPI to obtain the date and time  
+   values for these timezones and display them in place of the timezones.
