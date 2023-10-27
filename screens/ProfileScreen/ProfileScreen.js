@@ -26,22 +26,117 @@ function ProfileScreen() {
     }
   );
   //individual variables for onChangeText value update:
-  const [address, setAddress] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState(contact_info.address);
+  const [email, setEmail] = useState(contact_info.email);
+  const [phone, setPhone] = useState(contact_info.phone);
+
+  //These additional variables seem required when we insert validation
+  // as if validation fails, we will have to revert the changes made in the
+  // textInput field. This is the case as we are saving the value of
+  // textInput field using its 'onChangeText' prop.
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
+
+  // email pattern:
+  // for the email Regex, I have referred to this:
+  //https://emaillistvalidation.com/blog/mastering-regex-for-email-validation-the-ultimate-guide/
+  //with 2 changes in the 'Basic Email validation'.
+  const emailPattern = /^[A-Za-z0-9._%-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,4}$/;
+
+  //phone number pattern: created with trial and error to better understand regex
+  // using this tool:
+  //https://regexr.com/
+  //The following regex allows (123)-(456)-(7890) pattern,
+  // the same without any bracket, and/or without any dash as well.
+  const phonePattern = /^(\(?\d{3}\)?-?){2}\(?\d{4}\)?$/;
+
+  /*This function has been bound with 'onLayout' event listener of
+  this component's root View. It is responsible for synchronising
+  the values of the state variables associated with the user's
+  contact info with the values of the contact info input fields
+  stored in the local storage. Doing so is crucial, since the 'contact_info'
+  array variable is created on reload of the app with empty string
+  values, and must be updated with the values stored locally
+  before any other change takes place in the values of the
+  associated state variables. */
+  function getStoredValues() {
+    // if (address !== contact_info.address) setAddress(contact_info.address);
+    // if (email !== contact_info.email) setEmail(contact_info.email);
+    // if (phone != contact_info.phone) setPhone(contact_info.phone);
+  }
 
   function onEdit() {
     setEditing(true);
   }
+
   function onCancel() {
     setEditing(false);
   }
-  function onSave() {
-    setContact_info({ address: address, email: email, phone: phone });
-    setEditing(false);
+
+  //The following function would convert "(123)-(456)-(7890)"" into
+  // "1234567890" and return it. This is implemented so that the value
+  // written in the storage would contain only 10 digits of the input
+  // without any curved braces or dashes.
+  function formatPhoneValue(input) {
+    console.log("received input: " + input);
+    input = input.replaceAll("(", "");
+    input = input.replaceAll(")", "");
+    input = input.replaceAll("-", "");
+    console.log("formattedPhoneNumber: " + input);
+    setPhone(input); //yes, but this does not set the value of the state variable
+    //'phone' equal to the value of the variable 'input' in the current render. It will
+    // do so before the next render. And there is no way to match these two values
+    // for the rendered screen. So we will have to pass the derived value to the
+    // 'contact_info' storage variable instead of passing the state variable 'phone'.
+    const formattedPhone = input;
+    return formattedPhone;
   }
+
+  function onSave() {
+    console.log(isEmailValid);
+    console.log(isPhoneValid);
+    if (isEmailValid && isPhoneValid) {
+      formattedPhoneValue = formatPhoneValue(phone);
+      setContact_info({
+        address: address,
+        email: email,
+        phone: formattedPhoneValue,
+      });
+      setEditing(false);
+    }
+  }
+
+  //Function that is bound with 'onChangeText' prop of the TextInput responsible
+  // for taking email input.
+  function validateEmail(input) {
+    // console.log(input);
+    console.log("emailValid: " + emailPattern.test(input));
+    if (emailPattern.test(input)) {
+      setIsEmailValid(true);
+      setEmail(input);
+    } else {
+      setIsEmailValid(false);
+    }
+  }
+
+  //Function that is bound with 'onChangeText' prop of the TextInput responsible
+  // for taking phone number input:
+  function validatePhone(input) {
+    console.log(input);
+    console.log("phoneValid: " + phonePattern.test(input));
+    if (phonePattern.test(input)) {
+      setIsPhoneValid(true);
+      setPhone(input);
+    } else {
+      setIsPhoneValid(false);
+    }
+  }
+
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      // onLayout={getStoredValues}
+    >
       <View style={styles.section1}>
         <View style={styles.imageContainer}>
           <ProfileImage />
@@ -90,9 +185,7 @@ function ProfileScreen() {
               style={styles.fieldValue}
               keyboardType="email-address"
               returnKeyType="next"
-              onChangeText={(value) => {
-                setEmail(value);
-              }}
+              onChangeText={validateEmail}
             >
               {contact_info.email}
             </TextInput>
@@ -100,9 +193,7 @@ function ProfileScreen() {
             <TextInput
               style={styles.fieldValue}
               keyboardType="numeric"
-              onChangeText={(value) => {
-                setPhone(value);
-              }}
+              onChangeText={validatePhone}
               returnKeyType="go"
             >
               {contact_info.phone}
