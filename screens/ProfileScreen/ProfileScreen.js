@@ -6,8 +6,6 @@ import { MMKVLoader, useMMKVStorage } from "react-native-mmkv-storage";
 //custom components:
 import ProfileImage from "./ProfileImage";
 import { useState } from "react";
-//lazy loading:
-//?
 
 const storage = new MMKVLoader().initialize();
 
@@ -29,14 +27,15 @@ function ProfileScreen() {
   const [address, setAddress] = useState(contact_info.address);
   const [email, setEmail] = useState(contact_info.email);
   const [phone, setPhone] = useState(contact_info.phone);
-
+  //'presentedPhone' variable will be shown as the 'phone number'
+  // when this screen will be rendered:
+  let [presentedPhone, setPresentedPhone] = useState("");
   //These additional variables seem required when we insert validation
   // as if validation fails, we will have to revert the changes made in the
   // textInput field. This is the case as we are saving the value of
   // textInput field using its 'onChangeText' prop.
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
-
   // email pattern:
   // for the email Regex, I have referred to this:
   //https://emaillistvalidation.com/blog/mastering-regex-for-email-validation-the-ultimate-guide/
@@ -50,23 +49,14 @@ function ProfileScreen() {
   // the same without any bracket, and/or without any dash as well.
   const phonePattern = /^(\(?\d{3}\)?-?){2}\(?\d{4}\)?$/;
 
-  /*This function has been bound with 'onLayout' event listener of
-  this component's root View. It is responsible for synchronising
-  the values of the state variables associated with the user's
-  contact info with the values of the contact info input fields
-  stored in the local storage. Doing so is crucial, since the 'contact_info'
-  array variable is created on reload of the app with empty string
-  values, and must be updated with the values stored locally
-  before any other change takes place in the values of the
-  associated state variables. */
-  function getStoredValues() {
-    // if (address !== contact_info.address) setAddress(contact_info.address);
-    // if (email !== contact_info.email) setEmail(contact_info.email);
-    // if (phone != contact_info.phone) setPhone(contact_info.phone);
-  }
-
   function onEdit() {
     setEditing(true);
+    if (!isEmailValid) {
+      validateEmail(email);
+    }
+    if (!isPhoneValid) {
+      validatePhone(phone);
+    }
   }
 
   function onCancel() {
@@ -132,11 +122,25 @@ function ProfileScreen() {
     }
   }
 
+  function showPhoneNumber() {
+    //'presentablePhone' is the variable we will build to ultimately have the value
+    // of the phone number with brackets and dashes.
+    let presentablePhone = "(";
+    console.log(phone);
+    for (let i = 0; i < phone.length; i++) {
+      if (i === 3) {
+        presentablePhone = presentablePhone.concat(")-");
+      } else if (i === 6) {
+        presentablePhone = presentablePhone.concat("-");
+      }
+      presentablePhone = presentablePhone.concat(phone.charAt(i));
+      console.log("presentablePhone: " + presentablePhone);
+    }
+    setPresentedPhone(presentablePhone);
+  }
+
   return (
-    <View
-      style={styles.container}
-      // onLayout={getStoredValues}
-    >
+    <View style={styles.container} onLayout={showPhoneNumber}>
       <View style={styles.section1}>
         <View style={styles.imageContainer}>
           <ProfileImage />
@@ -151,11 +155,11 @@ function ProfileScreen() {
           <Button title="Edit" onPress={onEdit} />
         </View>
         <Text style={styles.fieldTitle}>Address</Text>
-        <Text style={styles.fieldValue}>{contact_info.address}</Text>
-        <Text style={styles.fieldTitle}>Email</Text>
-        <Text style={styles.fieldValue}>{contact_info.email}</Text>
-        <Text style={styles.fieldTitle}>Phone number</Text>
-        <Text style={styles.fieldValue}>{contact_info.phone}</Text>
+        <Text style={styles.fieldValue}>{address}</Text>
+        <Text style={styles.fieldTitle}>Email*</Text>
+        <Text style={styles.fieldValue}>{email}</Text>
+        <Text style={styles.fieldTitle}>Phone number*</Text>
+        <Text style={styles.fieldValue}>{presentedPhone}</Text>
       </View>
       <Modal
         animationType="fade"
@@ -178,26 +182,36 @@ function ProfileScreen() {
                 setAddress(value);
               }}
             >
-              {contact_info.address}
+              {address}
             </TextInput>
-            <Text style={styles.fieldTitle}>Email</Text>
+            <Text style={styles.fieldTitle}>Email*</Text>
             <TextInput
               style={styles.fieldValue}
               keyboardType="email-address"
               returnKeyType="next"
               onChangeText={validateEmail}
             >
-              {contact_info.email}
+              {email}
             </TextInput>
-            <Text style={styles.fieldTitle}>Phone number</Text>
+            {!isEmailValid && (
+              <Text style={styles.invalidMessage}>
+                Enter a valid email address.
+              </Text>
+            )}
+            <Text style={styles.fieldTitle}>Phone number*</Text>
             <TextInput
               style={styles.fieldValue}
               keyboardType="numeric"
               onChangeText={validatePhone}
               returnKeyType="go"
             >
-              {contact_info.phone}
+              {presentedPhone}
             </TextInput>
+            {!isPhoneValid && (
+              <Text style={styles.invalidMessage}>
+                Enter a valid Phone Number.
+              </Text>
+            )}
             <View style={styles.saveButton}>
               <Button title="save" onPress={onSave} />
             </View>
@@ -257,6 +271,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#0066ff",
   },
+  invalidFieldValue: {
+    color: "white",
+  },
+  invalidMessage: {
+    fontSize: 18,
+    color: "#b30000",
+    fontWeight: "bold",
+  },
   ModalContainer: {
     flex: 1,
     justifyContent: "flex-start",
@@ -267,4 +289,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 144,
   },
 });
+
 export default ProfileScreen;

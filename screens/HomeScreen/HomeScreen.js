@@ -4,11 +4,11 @@ import LocalTime from "./LocalTime";
 import PlusButton from "./PlusButton";
 import TimeList from "./TimeList";
 
-function HomeScreen({ onPlusPressed, timesArray }) {
+function HomeScreen({ onPlusPressed, timezone }) {
   return (
     <View style={styles.container}>
-      <LocalTime />
-      <TimeList timesArray={timesArray} />
+      <LocalTime style={styles.localTime} />
+      <TimeList style={styles.timeList} timezone={timezone} />
       <View style={styles.buttonContainer}>
         <PlusButton onPressed={onPlusPressed} />
       </View>
@@ -23,15 +23,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "orange",
   },
-  text: {
-    color: "white",
-    margin: 8,
-    fontSize: 30,
-    fontWeight: "400",
-  },
   buttonContainer: {
-    flex: 1,
-    // flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
     marginBottom: 16,

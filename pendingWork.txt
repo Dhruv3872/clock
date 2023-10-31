@@ -1,9 +1,0 @@
-1. Data validation before submission of contact info on Profile screen.- done for 
-email and phone values. I will keep it to that for now.
-2. A bug in the app: Upon restarting the app, the Profile screen takes data 
-from local storage, but that data is not stored in the individual contact info
-state variables.
-And upon save, the state variables' data is written in the storage. This
-overwrites individual fields to empty strings for the unchanged input fields 
-which are the initial values for 
-the associated state variables at the time of a reload or the first use of the app.: Fixed.

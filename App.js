@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState } from "react";
 
+//Third-party components:
 // expo/vector-icons:
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AntDesign } from "@expo/vector-icons";
@@ -22,25 +23,15 @@ import BedtimeScreen from "./screens/BedtimeScreen";
 import ProfileScreen from "./screens/ProfileScreen/ProfileScreen";
 
 export default function App() {
-  //State array variable to pass an array of timezones to the HomeScreen component,
-  // which in turn passes the array to TimeList component, which passes the array
-  // to the data prop of the Flatlist it uses to display the list of timezones
-  // selected by the user.
-  const [timesArray, setTimesArray] = useState([]);
+  const [timezone, setTimezone] = useState();
   const [plusPressed, setPlusPressed] = useState(false);
   //Navigator:
   const Tab = createBottomTabNavigator();
   function plusButtonHandler() {
     setPlusPressed(true);
   }
-  function timezoneValueHandler(timezone) {
-    console.log("timezone: " + timezone);
-    setTimesArray((timesArray) => [...timesArray, timezone]);
-    console.log(timesArray); //When we log the value of a state variable in
-    // on console after setting its value using the set method, it apparently logs
-    // the last value of the variable, not the latest value, but the state of the variable
-    // is updated fine, and the updated value is passed when we pass the variable using curly
-    // braces.
+  function timezoneValueHandler(passedTimezone) {
+    setTimezone(passedTimezone);
     setPlusPressed(false);
   }
   return (
@@ -96,7 +87,7 @@ export default function App() {
             children={() => (
               <HomeScreen
                 onPlusPressed={plusButtonHandler}
-                timesArray={timesArray}
+                timezone={timezone}
               />
             )}
           />

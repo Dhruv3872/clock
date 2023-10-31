@@ -1,24 +1,58 @@
-import { View } from "react-native";
+//This comonent is meant to be passed to the 'TimeCard' component.
+
+import { View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 
-function CurrentTime() {
+function CurrentTime({ timezone }) {
   const [data, setData] = useState([]);
-  const now = new Date();
-  /* While the time value at the heart of a Date object is UTC,
-  the basic methods to fetch the date and time or its components
-  all work in the local (i.e. host system) time zone and offset.
-  */
-  const time = now.getTime();
-  console.log(now.getHours() + ":" + now.getMinutes());
-  const url = "https://www.timeapi.io/api/Time/current/zone?timeZone=?/?";
+  const url =
+    "https://www.timeapi.io/api/Time/current/zone?timeZone=" + timezone;
+  console.log("url: " + url);
   useEffect(() => {
     fetch(url)
       .then((resp) => resp.json())
       .then((json) => setData(json))
       .catch((error) => console.error(error));
   }, []);
-  // console.log(data);
-  return <View>{/* <Text>{data["time"]}</Text> */}</View>;
+  const indextOfForwardSlash = timezone.indexOf("/");
+  const part1 = timezone.slice(0, indextOfForwardSlash);
+  const part2 = timezone.slice(indextOfForwardSlash + 1);
+  console.log("part2: " + part2);
+  console.log("part1: " + part1);
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.text}>{part2}</Text>
+        {/* //style={styles.city} */}
+        <Text>{part1}</Text>
+      </View>
+      <View style={styles.time}>
+        {/* <Text>Hi</Text> */}
+        <Text>{data["time"]}</Text>
+      </View>
+    </View>
+  );
 }
 
 export default CurrentTime;
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#ff8533",
+    margin: 8,
+    padding: 16,
+    borderRadius: 16,
+  },
+  text: {
+    color: "white",
+  },
+  city: {
+    // font
+  },
+  time: {
+    // flex: 1,
+    justifyContent: "center",
+  },
+});
