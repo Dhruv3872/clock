@@ -5,7 +5,7 @@
 // It is meant to be passed to the 'TimeList' component.
 
 import { View } from "react-native";
-import CurrentTime from "../../components/CurrentTime";
+import CurrentTime from "./CurrentTime";
 
 function TimeCard({ timezone, minute }) {
   return (
