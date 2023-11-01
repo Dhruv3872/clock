@@ -7,12 +7,12 @@
 import { View } from "react-native";
 import CurrentTime from "../../components/CurrentTime";
 
-function TimeCard({ timezone }) {
+function TimeCard({ timezone, minute }) {
   return (
     <View>
       <View>
         {/* <Text>{timezone}</Text> */}
-        <CurrentTime timezone={timezone} />
+        <CurrentTime timezone={timezone} minute={minute} />
       </View>
     </View>
   );

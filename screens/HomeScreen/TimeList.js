@@ -2,6 +2,7 @@
 //Its purpose is to show the time and date of the timezones chosen by the user.
 
 import { FlatList, Text, View, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
 
 //Third-party components:
 //for on-device storage:
@@ -13,11 +14,23 @@ import TimeCard from "./TimeCard";
 const storage = new MMKVLoader().initialize();
 
 function TimeList({ timezone }) {
+  const [minute, setMinute] = useState(new Date().getMinutes());
   const [timezones, setTimezones] = useMMKVStorage(
-    "savedTimezones",
+    "chosenTimezones",
     storage,
     []
   );
+  //used useEffect to re-render this component whenever the minute changes:
+  //This is necessary to update the timezone times whenever the minute changes:
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (minute != new Date().getMinutes()) {
+        setMinute(new Date().getMinutes());
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   let timezonesArrayEmpty = true;
   if (timezone !== undefined && timezone !== null) {
     if (!timezones.includes(timezone)) {
@@ -41,7 +54,7 @@ function TimeList({ timezone }) {
         <FlatList
           data={timezones}
           renderItem={(itemData) => {
-            return <Text>{itemData.item}</Text>;
+            return <TimeCard timezone={itemData.item} minute={minute} />;
           }}
         />
       )}
