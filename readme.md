@@ -5,9 +5,13 @@ alongwith its 'World clock' feature using [TimeAPI](https://www.timeapi.io/swagg
 
 ### Changes introduced in this commit:
 
-1. In Home Screen: The timezones passed from the Search screen are rendered on  
-   this screen with their time, day, date, and city name.
+1. SearchScreen:
+   1. TimezoneList is now rendered using locally saved array using react-native-mmkv-storage library.  
+      At the first instance, the data is fetched from the TimeAPI.
+   1. Tried to add props to the FlatList component of TimezoneList to optimize performance scrolling  
+      without significant success as still a lot better understanding of these props is needed.
+   1. Made the TimezoneList searchable using the TextInput placed above it.
 
 ### Changes in mind to be introduced in the near-future commits:
 
-1. There should be an 'x' button to delete a timezone from this screen.
+1. Incorporating stack navigation by adding Hamburger icon to the home screen.

@@ -4,9 +4,12 @@ import TimezoneList from "./TimezoneList";
 
 function SearchScreen({ passChosenTimezone }) {
   const [chosenTimezone, setChosenTimezone] = useState("");
-  //Not using this function to do anything meaningful just yet.
-  function fetchTimezones(typedValue) {
-    console.log(typedValue);
+  const [typedValue, setTypedValue] = useState("");
+
+  // The function responsible for passing value typed in the text input
+  // to the 'TimezoneList' component.
+  function passTypedText(input) {
+    setTypedValue(input);
   }
   function passTimezoneValue(timezone) {
     setChosenTimezone(timezone);
@@ -16,14 +19,16 @@ function SearchScreen({ passChosenTimezone }) {
     <View style={styles.container}>
       <TextInput
         style={styles.searchTimeZone}
-        // onChangeText={fetchTimezones}
-        placeholder="Search for a time zone"
+        placeholder="Search for a timezone"
         autoFocus={true}
         enterKeyHint="search"
-        value={chosenTimezone}
+        onChangeText={passTypedText}
       ></TextInput>
       <View style={styles.list}>
-        <TimezoneList passTimezoneValue={passTimezoneValue} />
+        <TimezoneList
+          passTimezoneValue={passTimezoneValue}
+          typedText={typedValue}
+        />
       </View>
       <Text>{chosenTimezone}</Text>
     </View>
