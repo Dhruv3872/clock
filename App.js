@@ -1,113 +1,37 @@
 import { StatusBar } from "expo-status-bar";
-import { View, Modal, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+
 //react-navigation:
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState } from "react";
+//drawer-navigation:
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import CustomDrawer from "./components/CustomDrawer";
 
-//Third-party components:
-// expo/vector-icons:
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-
-//custome-made components:
-//screens:
-import HomeScreen from "./screens/HomeScreen/HomeScreen";
-import SearchScreen from "./screens/SearchScreen/SearchScreen";
-import AlarmScreen from "./screens/AlarmScreen";
-import TimerScreen from "./screens/TimerScreen";
-import StopwatchScreen from "./screens/StopwatchScreen";
-import BedtimeScreen from "./screens/BedtimeScreen";
-import ProfileScreen from "./screens/ProfileScreen/ProfileScreen";
+//drawer navigation screens:
+import Home from "./components/Home";
+import SettingsScreen from "./screens/SettingsScreen";
+import AboutUs from "./screens/AboutUs";
+import ContactUs from "./screens/ContactUs";
+import Logout from "./screens/Logout";
 
 export default function App() {
-  const [timezone, setTimezone] = useState();
-  const [plusPressed, setPlusPressed] = useState(false);
-  //Navigator:
-  const Tab = createBottomTabNavigator();
-  function plusButtonHandler() {
-    setPlusPressed(true);
-  }
-  function timezoneValueHandler(passedTimezone) {
-    setTimezone(passedTimezone);
-    setPlusPressed(false);
-  }
+  const drawer = createDrawerNavigator();
   return (
     <View style={styles.navigationContainerView}>
       <NavigationContainer style={styles.container}>
         <StatusBar style="auto" />
-        <Tab.Navigator
-          initialRouteName="Clock"
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              let icon;
-              if (route.name === "Clock") {
-                iconName = focused ? "clockcircle" : "clockcircleo";
-                icon = <AntDesign name={iconName} size={size} color={color} />;
-              } else if (route.name === "Alarm") {
-                iconName = focused ? "alarm" : "alarm-outline";
-                icon = <Ionicons name={iconName} size={size} color={color} />;
-              } else if (route.name === "Timer") {
-                iconName = focused ? "timer-sand-full" : "timer-sand";
-                icon = (
-                  <MaterialCommunityIcons
-                    name={iconName}
-                    size={size}
-                    color={color}
-                  />
-                );
-              } else if (route.name === "Stopwatch") {
-                iconName = focused ? "md-stopwatch" : "md-stopwatch-outline";
-                icon = <Ionicons name={iconName} size={size} color={color} />;
-              } else if (route.name === "Bedtime") {
-                iconName = focused ? "bed" : "bed-outline";
-                icon = (
-                  <MaterialCommunityIcons
-                    name={iconName}
-                    size={size}
-                    color={color}
-                  />
-                );
-              } else if (route.name === "Profile") {
-                iconName = focused ? "user-circle" : "user-circle-o";
-                icon = (
-                  <FontAwesome name={iconName} size={size} color={color} />
-                );
-              }
-              return icon;
-            },
-          })}
+        <drawer.Navigator
+          drawerContent={(props) => <CustomDrawer {...props} />}
         >
-          <Tab.Screen name="Alarm" component={AlarmScreen} />
-          <Tab.Screen
-            name="Clock"
-            children={() => (
-              <HomeScreen
-                onPlusPressed={plusButtonHandler}
-                timezone={timezone}
-              />
-            )}
-          />
-          <Tab.Screen name="Timer" component={TimerScreen} />
-          <Tab.Screen name="Stopwatch" component={StopwatchScreen} />
-          <Tab.Screen name="Bedtime" component={BedtimeScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
-        </Tab.Navigator>
+          {/* The Home screen now holds all the tabs using
+           Bottom tab navigator. */}
+          <drawer.Screen name="Home" component={Home} />
+          <drawer.Screen name="Settings" component={SettingsScreen} />
+          <drawer.Screen name="About Us" component={AboutUs} />
+          <drawer.Screen name="Contact Us" component={ContactUs} />
+          <drawer.Screen name="Logout" component={Logout} />
+        </drawer.Navigator>
       </NavigationContainer>
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={plusPressed}
-        onRequestClose={() => setPlusPressed(false)}
-      >
-        <SearchScreen
-          style={styles.modalContainer}
-          passChosenTimezone={timezoneValueHandler}
-        />
-      </Modal>
     </View>
   );
 }

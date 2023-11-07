@@ -5,13 +5,11 @@ alongwith its 'World clock' feature using [TimeAPI](https://www.timeapi.io/swagg
 
 ### Changes introduced in this commit:
 
-1. SearchScreen:
-   1. TimezoneList is now rendered using locally saved array using react-native-mmkv-storage library.  
-      At the first instance, the data is fetched from the TimeAPI.
-   1. Tried to add props to the FlatList component of TimezoneList to optimize performance scrolling  
-      without significant success as still a lot better understanding of these props is needed.
-   1. Made the TimezoneList searchable using the TextInput placed above it.
+1. Added [Drawer navigation](https://reactnavigation.org/docs/drawer-navigator) to the app.
+2. Added SearchScreen modal to the ClockScreen component instead of adding it  
+   to the parent of ClockScreen.
 
 ### Changes in mind to be introduced in the near-future commits:
 
-1. Incorporating stack navigation by adding Hamburger icon to the home screen.
+1. As of this commit, the development build size is 70 MB. We need to shrink it  
+   to bring it under 30MB.

@@ -1,4 +1,4 @@
-//This comonent is meant to be passed to the 'TimeCard' component.
+//This comonent is passed to the 'TimeCard' component.
 
 import { View, Text, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";

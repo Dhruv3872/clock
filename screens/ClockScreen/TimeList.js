@@ -1,4 +1,4 @@
-//This component will sit in the Homescreen below the LocalTime component.
+//This component sits in the Homescreen below the LocalTime component.
 //Its purpose is to show the time and date of the timezones chosen by the user.
 
 import { FlatList, Text, View, StyleSheet } from "react-native";
