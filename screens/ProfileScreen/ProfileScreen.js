@@ -127,13 +127,13 @@ function ProfileScreen() {
     // of the phone number with brackets and dashes.
     let presentablePhone = "(";
     console.log(phone);
-    for (let i = 0; i < phone.length; i++) {
+    for (let i = 0; i < contact_info.phone.length; i++) {
       if (i === 3) {
         presentablePhone = presentablePhone.concat(")-");
       } else if (i === 6) {
         presentablePhone = presentablePhone.concat("-");
       }
-      presentablePhone = presentablePhone.concat(phone.charAt(i));
+      presentablePhone = presentablePhone.concat(contact_info.phone.charAt(i));
       console.log("presentablePhone: " + presentablePhone);
     }
     setPresentedPhone(presentablePhone);
@@ -155,9 +155,9 @@ function ProfileScreen() {
           <Button title="Edit" onPress={onEdit} />
         </View>
         <Text style={styles.fieldTitle}>Address</Text>
-        <Text style={styles.fieldValue}>{address}</Text>
+        <Text style={styles.fieldValue}>{contact_info.address}</Text>
         <Text style={styles.fieldTitle}>Email*</Text>
-        <Text style={styles.fieldValue}>{email}</Text>
+        <Text style={styles.fieldValue}>{contact_info.email}</Text>
         <Text style={styles.fieldTitle}>Phone number*</Text>
         <Text style={styles.fieldValue}>{presentedPhone}</Text>
       </View>
@@ -182,7 +182,7 @@ function ProfileScreen() {
                 setAddress(value);
               }}
             >
-              {address}
+              {contact_info.address}
             </TextInput>
             <Text style={styles.fieldTitle}>Email*</Text>
             <TextInput
@@ -191,7 +191,7 @@ function ProfileScreen() {
               returnKeyType="next"
               onChangeText={validateEmail}
             >
-              {email}
+              {contact_info.email}
             </TextInput>
             {!isEmailValid && (
               <Text style={styles.invalidMessage}>
@@ -205,7 +205,7 @@ function ProfileScreen() {
               onChangeText={validatePhone}
               returnKeyType="go"
             >
-              {presentedPhone}
+              {contact_info.phone}
             </TextInput>
             {!isPhoneValid && (
               <Text style={styles.invalidMessage}>

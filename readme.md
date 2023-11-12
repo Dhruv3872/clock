@@ -5,9 +5,7 @@ alongwith its 'World clock' feature using [TimeAPI](https://www.timeapi.io/swagg
 
 ### Changes introduced in this commit:
 
-1. Added [Drawer navigation](https://reactnavigation.org/docs/drawer-navigator) to the app.
-2. Added SearchScreen modal to the ClockScreen component instead of adding it  
-   to the parent of ClockScreen.
+1. Fixed bugs present in ProfileScreen.
 
 ### Changes in mind to be introduced in the near-future commits:
 
